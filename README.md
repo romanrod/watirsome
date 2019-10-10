@@ -119,6 +119,23 @@ page.country #=> "Russia"
 page.agree = true
 page.agree #=> true
 ```
+#### Element presence
+
+For each element, presence method is defined which returns `true` or `false` acording to the element existance
+Element presence method name is `#{element_name}?`.
+
+```ruby
+class Page
+include Watirsome
+
+  element :body, id: 'present'
+  div :container, class: 'do_not_exists'
+end
+
+page = Page.new(@browser)
+page.body?  #=> true
+page.container? #=> false
+```
 
 #### Custom locators
 

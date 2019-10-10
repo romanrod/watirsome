@@ -7,10 +7,12 @@ module ElementsSpec
     text_field :name, id: 'name'
     button :set, id: 'set_name'
     div :greeting, id: 'greeting'
-
+    div :some, id: 'unexisting'
+    
     text_field :name2, -> { region_element.text_field(id: 'name') }
     button :set2, -> { region_element.button(id: 'set_name') }
     div :greeting2, -> { region_element.div(id: 'greeting') }
+    div :some2, -> { region_element.div(id: 'unexisting') }
 
     div :greeting3, id: 'greeting'
 
@@ -79,6 +81,23 @@ module ElementsSpec
         page.set2
         expect(page.greeting2).to eq 'Hello Bob!'
         expect(page.set2_button).to be_a Watir::Button
+      end
+    end
+
+    it 'supports elements presence' do
+      GreetingPage.new(WatirHelper.browser).tap do |page|
+        page.browser.goto page.class::URL
+        
+        expect(page.name?).to eq true
+        expect(page.some?).to eq false
+      end
+    end
+
+    it 'supports elements presence (lambda)' do
+      GreetingPage.new(WatirHelper.browser).tap do |page|
+        page.browser.goto page.class::URL
+        expect(page.name2?).to eq true
+        expect(page.some2?).to eq false
       end
     end
 

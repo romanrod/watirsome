@@ -12,6 +12,7 @@ module Watirsome
           name, args = parse_args(args)
           block = proc_from_args(args, &blk)
           define_element_accessor(name, method, args, &block)
+          define_presence_accessor(name, method, args, &block)
           define_click_accessor(name, method, args, &block) if Watirsome.clickable?(method)
           define_read_accessor(name, method, args, &block)  if Watirsome.readable?(method)
           define_set_accessor(name, method, args, &block)   if Watirsome.settable?(method)
@@ -151,6 +152,36 @@ module Watirsome
               element.set(*opts)
             else
               element.send_keys(*opts)
+            end
+          end
+        end)
+      end
+
+      #
+      # Defines accessor which ask for Watir element presence.
+      # Method name is element name + "?".
+      #
+      # Note that custom block arguments are not used here.
+      #
+      # @param [Symbol] name Element name
+      # @param [Symbol] method Watir method
+      # @param [Array] args Splat of locators
+      # @param [Proc] block Block as element retriever
+      # @api private
+      #
+      def define_presence_accessor(name, method, *args, &block)
+        watir_args, custom_args = extract_custom_args(method, args)
+        include(Module.new do
+          define_method "#{name}?" do |*opts|
+            element = if block_given?
+                        instance_exec(&block)
+                      else
+                        grab_elements(method, watir_args, custom_args)
+                      end
+            begin
+              element.present?
+            rescue
+              false
             end
           end
         end)
