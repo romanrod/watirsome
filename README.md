@@ -119,7 +119,7 @@ page.country #=> "Russia"
 page.agree = true
 page.agree #=> true
 ```
-#### Element presence
+##### Element presence
 
 For each element, presence method is defined which returns `true` or `false` acording to the element existance
 Element presence method name is `#{element_name}?`.
