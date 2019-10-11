@@ -121,7 +121,7 @@ page.agree #=> true
 ```
 ##### element presence
 
-For each element, presence method is defined which returns `true` or `false` acording to the element existance
+For each element, presence method is defined which returns `true` or `false` according to the element existance.
 Element presence method name is `#{element_name}?`.
 
 ```ruby
