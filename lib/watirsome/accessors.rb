@@ -178,11 +178,7 @@ module Watirsome
                       else
                         grab_elements(method, watir_args, custom_args)
                       end
-            begin
-              element.present?
-            rescue
-              false
-            end
+            element.present?
           end
         end)
       end
