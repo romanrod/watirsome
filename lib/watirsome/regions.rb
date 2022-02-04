@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Watirsome
   module Regions
     #
@@ -81,12 +83,12 @@ module Watirsome
                   end
 
           if each
-            elements = (scope.exists? ? scope.elements(each) : [])
+            elements = scope.elements(each)
 
-            if collection_class_name && namespace.const_defined?(collection_class_name)
-              region_collection_class = namespace.const_get(collection_class_name)
-            elsif collection_class
+            if collection_class
               region_collection_class = collection_class
+            elsif collection_class_name && namespace.const_defined?(collection_class_name)
+              region_collection_class = namespace.const_get(collection_class_name)
             else
               return elements.map { |element| region_single_class.new(@browser, element, self) }
             end
@@ -123,11 +125,13 @@ module Watirsome
       finder_method_name = region_name.to_s.sub(/s\z/, '')
       include(Module.new do
         define_method(finder_method_name) do |**opts|
-          __send__(region_name).find do |entity|
-            opts.all? do |key, value|
-              entity.__send__(key) == value
+          Watir::Wait.until(message: "No #{finder_method_name} matching: #{opts}.") do
+            __send__(region_name).find do |entity|
+              opts.all? do |key, value|
+                entity.__send__(key) == value
+              end
             end
-          end || raise("No #{finder_method_name} matching: #{opts}.")
+          end
         end
       end)
     end

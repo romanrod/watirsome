@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module CollectionRegionUsingClassSpec
-  URL = "file:///#{File.expand_path('support/doctest.html')}".freeze
+  URL = "file:///#{File.expand_path('support/doctest.html')}"
 
   class UserRegion
     include Watirsome
@@ -25,7 +27,7 @@ module CollectionRegionUsingClassSpec
         # You can search for particular regions in collection.
         expect(page.user(name: 'John Smith 1').name).to eq 'John Smith 1'
         expect(page.user(name: 'John Smith 2').name).to eq 'John Smith 2'
-        expect { page.user(name: 'John Smith 3') }.to raise_error(RuntimeError, /No user matching:/)
+        expect { page.user(name: 'John Smith 3') }.to raise_error(Watir::Wait::TimeoutError, /No user matching:/)
       end
     end
   end

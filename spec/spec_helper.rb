@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 require 'watir'
 require 'pry'
 require_relative '../lib/watirsome'
+require 'webdrivers'
 
 class WatirHelper
   class << self
@@ -9,6 +12,8 @@ class WatirHelper
     end
   end
 end
+
+Watir.default_timeout = 3
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
